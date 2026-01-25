@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.kidofy.kidofyapp",
+      "sha256_cert_fingerprints": [
+        "16:8c:2a:45:03:09:5e:e4:e2:38:7f:4b:f9:eb:83:18:b5:af:45:fd:27:99:81:1b:92:21:4b:ff:10:8f:c4:0e"
+      ]
+    }
+  }
+]
