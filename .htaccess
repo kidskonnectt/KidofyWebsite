@@ -11,9 +11,18 @@
     # RewriteCond %{HTTPS} off
     # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Remove .html extension
+    # Allow direct access to channel and snaps directories
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^(channel|snaps)(/|$) - [L]
+
+    # Allow .well-known directory
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^\.well-known(/|$) - [L]
+
+    # Remove .html extension (but not for channel and snaps)
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}\.html -f
+    RewriteCond %{REQUEST_URI} !^/(channel|snaps)
     RewriteRule ^([^\.]+)$ $1.html [NC,L]
 
     # Prevent direct access to .html files

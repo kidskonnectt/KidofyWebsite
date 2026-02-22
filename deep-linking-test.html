@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Linking Test - Kidofy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+        
+        .section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .test-group {
+            margin-bottom: 20px;
+        }
+        
+        .test-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+            text-decoration: underline;
+            font-size: 13px;
+        }
+        
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        
+        .status {
+            background: #f0f4ff;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .status.success {
+            background: #f0fff4;
+            border-left-color: #48bb78;
+            color: #22543d;
+        }
+        
+        .status.error {
+            background: #fff5f5;
+            border-left-color: #f56565;
+            color: #742a2a;
+        }
+        
+        .code-block {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 12px;
+            overflow-x: auto;
+            margin: 10px 0;
+            color: #333;
+        }
+        
+        .check-list {
+            list-style: none;
+        }
+        
+        .check-list li {
+            padding: 8px 0;
+            color: #666;
+        }
+        
+        .check-list li:before {
+            content: "✓ ";
+            color: #48bb78;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .warning {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            color: #7d6608;
+            font-size: 13px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔗 Deep Linking Test Center</h1>
+        <p class="subtitle">Test your Kidofy deep linking setup</p>
+        
+        <!-- Test 1: assetlinks.json -->
+        <div class="section">
+            <h2>1. Verify Domain Verification File</h2>
+            <p style="color: #666; margin-bottom: 15px;">Check if assetlinks.json is accessible and properly formatted.</p>
+            
+            <div class="test-group">
+                <span class="test-label">Test assetlinks.json Accessibility</span>
+                <div class="button-row">
+                    <button class="btn btn-primary" onclick="testAssetLinks()">Test assetlinks.json</button>
+                    <a href="https://www.kidofy.in/.well-known/assetlinks.json" target="_blank" class="btn btn-secondary">View Raw File</a>
+                </div>
+                <div id="assetlinks-result"></div>
+            </div>
+        </div>
+        
+        <!-- Test 2: Channel Deep Links -->
+        <div class="section">
+            <h2>2. Test Channel Deep Links</h2>
+            <p style="color: #666; margin-bottom: 15px;">Open channels in the Kidofy app</p>
+            
+            <div class="test-group">
+                <span class="test-label">Channel Links (Pre-made)</span>
+                <div class="button-row">
+                    <a href="https://www.kidofy.in/channel/Animals" class="btn btn-primary">🦁 Animals Channel</a>
+                    <a href="https://www.kidofy.in/channel/Learning" class="btn btn-primary">📚 Learning Channel</a>
+                    <a href="https://www.kidofy.in/channel/Drawing" class="btn btn-primary">🎨 Drawing Channel</a>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <span class="test-label">Custom Channel Name</span>
+                <div class="input-group">
+                    <input type="text" id="channelName" placeholder="Enter channel name..." value="">
+                    <button class="btn btn-primary" onclick="testChannel()">Open Channel</button>
+                </div>
+            </div>
+            
+            <div class="status">
+                <strong>How it works:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>Clicking these links opens the Kidofy app (if installed)</li>
+                    <li>The app navigates to the specified channel</li>
+                    <li>If app is not installed, you'll see an install prompt</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Test 3: Snaps Deep Links -->
+        <div class="section">
+            <h2>3. Test Snaps (Videos) Deep Links</h2>
+            <p style="color: #666; margin-bottom: 15px;">Open snaps feed or specific videos</p>
+            
+            <div class="test-group">
+                <span class="test-label">Snaps Feed (No specific video)</span>
+                <div class="button-row">
+                    <a href="https://www.kidofy.in/snaps" class="btn btn-primary">📱 Open Snaps Feed</a>
+                </div>
+            </div>
+            
+            <div class="test-group">
+                <span class="test-label">Specific Video</span>
+                <div class="input-group">
+                    <input type="text" id="videoId" placeholder="Enter video ID..." value="">
+                    <button class="btn btn-primary" onclick="testVideo()">Open Video</button>
+                </div>
+                <p style="font-size: 12px; color: #999; margin-top: 8px;">Example: abc123, video456, etc.</p>
+            </div>
+            
+            <div class="status">
+                <strong>How it works:</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>Snaps feed link opens the shorts/snaps section</li>
+                    <li>Video ID link opens specific video in snaps feed</li>
+                    <li>App must be installed for deep link to work</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Test 4: Status Checks -->
+        <div class="section">
+            <h2>4. Status Checks</h2>
+            <p style="color: #666; margin-bottom: 15px;">Verify your deep linking setup</p>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                <button class="btn btn-primary" onclick="runAllChecks()" style="grid-column: 1/-1;">Run All Checks</button>
+            </div>
+            
+            <div id="check-results" style="margin-top: 20px;"></div>
+        </div>
+        
+        <!-- Implementation Guide -->
+        <div class="section">
+            <h2>5. What's Configured</h2>
+            <p style="color: #666; margin-bottom: 15px;">Your deep linking setup includes:</p>
+            
+            <ul class="check-list">
+                <li>✓ Android App Links with domain verification</li>
+                <li>✓ Channel deep link handler: <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">/channel/&lt;name&gt;</code></li>
+                <li>✓ Snaps feed handler: <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">/snaps</code></li>
+                <li>✓ Video deep link handler: <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">/snaps/&lt;videoId&gt;</code></li>
+                <li>✓ Domain verification file: <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 3px;">/.well-known/assetlinks.json</code></li>
+                <li>✓ Web routing (.htaccess) configured</li>
+            </ul>
+            
+            <div class="warning" style="margin-top: 20px;">
+                <strong>⏱️ Note:</strong> Google Play Console may take up to 24 hours to verify your domain. If links still show as "not working" after 24 hours, check that assetlinks.json is accessible and your app signing key fingerprints are correct.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Test assetlinks.json
+        function testAssetLinks() {
+            const resultDiv = document.getElementById('assetlinks-result');
+            resultDiv.innerHTML = '<div class="status" style="margin-top: 15px;">⏳ Testing...</div>';
+            
+            fetch('https://www.kidofy.in/.well-known/assetlinks.json')
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    const hasCorrectRelation = data[0]?.relation?.includes('delegate_permission/common.handle_all_urls');
+                    const hasPackage = data[0]?.target?.package_name === 'com.kidofy.kidsapp';
+                    const hasCerts = data[0]?.target?.sha256_cert_fingerprints?.length > 0;
+                    
+                    let html = '<div class="status success" style="margin-top: 15px;">';
+                    html += '<strong>✓ assetlinks.json is accessible and valid!</strong><br>';
+                    html += 'File structure:' ;
+                    html += '<div class="code-block">' + JSON.stringify(data, null, 2) + '</div>';
+                    html += '</div>';
+                    resultDiv.innerHTML = html;
+                })
+                .catch(error => {
+                    resultDiv.innerHTML = `<div class="status error" style="margin-top: 15px;">
+                        <strong>✗ Error: ${error.message}</strong><br>
+                        assetlinks.json is not accessible or has invalid JSON format.
+                    </div>`;
+                });
+        }
+
+        // Test channel
+        function testChannel() {
+            const name = document.getElementById('channelName').value.trim();
+            if (!name) {
+                alert('Please enter a channel name');
+                return;
+            }
+            window.location.href = `https://www.kidofy.in/channel/${encodeURIComponent(name)}`;
+        }
+
+        // Test video
+        function testVideo() {
+            const id = document.getElementById('videoId').value.trim();
+            if (!id) {
+                alert('Please enter a video ID');
+                return;
+            }
+            window.location.href = `https://www.kidofy.in/snaps/${encodeURIComponent(id)}`;
+        }
+
+        // Run all checks
+        function runAllChecks() {
+            const resultsDiv = document.getElementById('check-results');
+            let html = '';
+            
+            // Check 1: assetlinks.json
+            html += '<div style="margin-bottom: 15px;">';
+            html += '<strong>Checking assetlinks.json...</strong>';
+            html += '<div id="check-assetlinks" class="status" style="margin-top: 8px;">⏳</div>';
+            html += '</div>';
+            
+            resultsDiv.innerHTML = html;
+            
+            Promise.all([
+                fetch('https://www.kidofy.in/.well-known/assetlinks.json')
+                    .then(r => r.ok)
+                    .catch(() => false)
+                    .then(ok => {
+                        const status = ok ? 
+                            '<div class="status success">✓ assetlinks.json accessible</div>' :
+                            '<div class="status error">✗ assetlinks.json not accessible</div>';
+                        document.getElementById('check-assetlinks').outerHTML = status;
+                    }),
+                
+                fetch('https://www.kidofy.in/channel/test')
+                    .then(() => {
+                        const status = '<div id="check-channel" class="status success">✓ Channel page accessible</div>';
+                        resultsDiv.innerHTML += status;
+                    })
+                    .catch(() => {
+                        const status = '<div id="check-channel" class="status error">✗ Channel page returned error</div>';
+                        resultsDiv.innerHTML += status;
+                    }),
+                
+                fetch('https://www.kidofy.in/snaps')
+                    .then(() => {
+                        const status = '<div id="check-snaps" class="status success">✓ Snaps page accessible</div>';
+                        resultsDiv.innerHTML += status;
+                    })
+                    .catch(() => {
+                        const status = '<div id="check-snaps" class="status error">✗ Snaps page returned error</div>';
+                        resultsDiv.innerHTML += status;
+                    })
+            ]);
+        }
+    </script>
+</body>
+</html>
