@@ -13,13 +13,57 @@ async function loadComponents() {
         const footerRes = await fetch('components/footer.html');
         const footerHtml = await footerRes.text();
         document.getElementById('footer-placeholder').innerHTML = footerHtml;
-        
-        // Initialize footer JS after loading
+
+        // Initialize header and footer JS after loading
+        initHeaderInteractions();
         initFooterInteractions();
 
     } catch (error) {
         console.error('Error loading components:', error);
     }
+}
+
+function initHeaderInteractions() {
+    const navbar = document.querySelector('.navbar');
+    const menuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    let lastScroll = 0;
+
+    // Mobile Menu Toggle
+    if (menuBtn) {
+        menuBtn.addEventListener('click', () => {
+            menuBtn.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+    }
+
+    // Advanced Scroll Header (Hide/Unhide)
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll <= 0) {
+            navbar.classList.remove('nav-hidden');
+            return;
+        }
+
+        if (currentScroll > lastScroll && !navbar.classList.contains('nav-hidden')) {
+            // Scroll Down - Hide
+            navbar.classList.add('nav-hidden');
+        } else if (currentScroll < lastScroll && navbar.classList.contains('nav-hidden')) {
+            // Scroll Up - Show
+            navbar.classList.remove('nav-hidden');
+        }
+        lastScroll = currentScroll;
+    });
+
+    // Close menu on link click
+    const links = document.querySelectorAll('.nav-links a');
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            menuBtn?.classList.remove('active');
+            navLinks?.classList.remove('active');
+        });
+    });
 }
 
 function initFooterInteractions() {
@@ -41,7 +85,7 @@ function initFooterInteractions() {
 function initAnimations() {
     const observerOptions = {
         threshold: 0.1,
-        rootMargin: '0px'
+        rootMargin: '0px 0px -50px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
@@ -52,18 +96,23 @@ function initAnimations() {
             }
         });
     }, observerOptions);
+
+    // Apply reveal classes globally to all cards and major sections
+    const hiddenElements = document.querySelectorAll('.clay-card, .title-3d, .premium-feature-showcase');
+    hiddenElements.forEach(el => {
+        el.classList.add('reveal');
+        observer.observe(el);
+    });
 }
 
-// 3D Parallax Effect for shapes
+// 3D Parallax Effect for background dots
 document.addEventListener('mousemove', (e) => {
-    const shapes = document.querySelectorAll('.shape');
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
+    const layers = document.querySelectorAll('.dot-layer');
 
-    shapes.forEach((shape, index) => {
-        const speed = (index + 1) * 2;
+    layers.forEach((layer, index) => {
+        const speed = (index + 1) * 30; // Subtler parallax for dots
         const xOffset = (window.innerWidth / 2 - e.clientX) / speed;
         const yOffset = (window.innerHeight / 2 - e.clientY) / speed;
-        shape.style.transform = `translate(${xOffset}px, ${yOffset}px) rotate(${x * 20}deg)`;
+        layer.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
     });
 });
